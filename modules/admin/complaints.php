@@ -127,41 +127,47 @@ foreach ($complaints as $row) {
             </tr>
         </thead>
         <tbody>
-            <?php foreach ($complaints as $c): ?>
+            <?php if (empty($complaints)): ?>
                 <tr>
-                    <td><?= e($c['complaint_uid']); ?></td>
-                    <td><?= e($c['student_name']); ?></td>
-                    <td><?= e($c['subject']); ?></td>
-                    <td><?= e($c['priority']); ?></td>
-                    <?php $statusClass = 'status-' . strtolower(str_replace(' ', '-', $c['status'])); ?>
-                    <td><span class="badge <?= e($statusClass); ?>"><?= e($c['status']); ?></span></td>
-                    <td><?= $c['escalated'] ? 'Yes' : 'No'; ?></td>
-                    <td>
-                        <form method="POST" style="display: grid; gap: 6px;">
-                            <input type="hidden" name="csrf_token" value="<?= e(csrf_token()); ?>">
-                            <input type="hidden" name="complaint_id" value="<?= e((string) $c['id']); ?>">
-                            <select name="status">
-                                <option <?= $c['status'] === 'Submitted' ? 'selected' : ''; ?>>Submitted</option>
-                                <option <?= $c['status'] === 'Under Review' ? 'selected' : ''; ?>>Under Review</option>
-                                <option <?= $c['status'] === 'In Progress' ? 'selected' : ''; ?>>In Progress</option>
-                                <option <?= $c['status'] === 'Resolved' ? 'selected' : ''; ?>>Resolved</option>
-                                <option <?= $c['status'] === 'Rejected' ? 'selected' : ''; ?>>Rejected</option>
-                            </select>
-                            <select name="assigned_staff">
-                                <option value="">Assign Staff</option>
-                                <?php foreach ($staffList as $staff): ?>
-                                    <option value="<?= e((string) $staff['id']); ?>" <?= $c['assigned_staff_id'] == $staff['id'] ? 'selected' : ''; ?>>
-                                        <?= e($staff['name']); ?>
-                                    </option>
-                                <?php endforeach; ?>
-                            </select>
-                            <input type="text" name="remark" placeholder="Remark">
-                            <button class="btn outline" type="submit">Update</button>
-                            <a class="btn outline" href="<?= e($BASE_URL); ?>/modules/complaints/view.php?id=<?= e((string) $c['id']); ?>">View</a>
-                        </form>
-                    </td>
+                    <td colspan="7" style="text-align:center;">No complaints found for this filter.</td>
                 </tr>
-            <?php endforeach; ?>
+            <?php else: ?>
+                <?php foreach ($complaints as $c): ?>
+                    <tr>
+                        <td><?= e($c['complaint_uid']); ?></td>
+                        <td><?= e($c['student_name']); ?></td>
+                        <td><?= e($c['subject']); ?></td>
+                        <td><?= e($c['priority']); ?></td>
+                        <?php $statusClass = 'status-' . strtolower(str_replace(' ', '-', $c['status'])); ?>
+                        <td><span class="badge <?= e($statusClass); ?>"><?= e($c['status']); ?></span></td>
+                        <td><?= $c['escalated'] ? 'Yes' : 'No'; ?></td>
+                        <td>
+                            <form method="POST" style="display: grid; gap: 6px;">
+                                <input type="hidden" name="csrf_token" value="<?= e(csrf_token()); ?>">
+                                <input type="hidden" name="complaint_id" value="<?= e((string) $c['id']); ?>">
+                                <select name="status">
+                                    <option <?= $c['status'] === 'Submitted' ? 'selected' : ''; ?>>Submitted</option>
+                                    <option <?= $c['status'] === 'Under Review' ? 'selected' : ''; ?>>Under Review</option>
+                                    <option <?= $c['status'] === 'In Progress' ? 'selected' : ''; ?>>In Progress</option>
+                                    <option <?= $c['status'] === 'Resolved' ? 'selected' : ''; ?>>Resolved</option>
+                                    <option <?= $c['status'] === 'Rejected' ? 'selected' : ''; ?>>Rejected</option>
+                                </select>
+                                <select name="assigned_staff">
+                                    <option value="">Assign Staff</option>
+                                    <?php foreach ($staffList as $staff): ?>
+                                        <option value="<?= e((string) $staff['id']); ?>" <?= $c['assigned_staff_id'] == $staff['id'] ? 'selected' : ''; ?> >
+                                            <?= e($staff['name']); ?>
+                                        </option>
+                                    <?php endforeach; ?>
+                                </select>
+                                <input type="text" name="remark" placeholder="Remark">
+                                <button class="btn outline" type="submit">Update</button>
+                                <a class="btn outline" href="<?= e($BASE_URL); ?>/modules/complaints/view.php?id=<?= e((string) $c['id']); ?>">View</a>
+                            </form>
+                        </td>
+                    </tr>
+                <?php endforeach; ?>
+            <?php endif; ?>
         </tbody>
     </table>
 
