@@ -61,11 +61,11 @@ if ($search) {
     $params['search'] = '%' . $search . '%';
 }
 if ($statusFilter) {
-    $where .= " AND status = :status";
+    $where .= " AND complaints.status = :status";
     $params['status'] = $statusFilter;
 }
 if ($categoryFilter) {
-    $where .= " AND category = :category";
+    $where .= " AND complaints.category = :category";
     $params['category'] = $categoryFilter;
 }
 
